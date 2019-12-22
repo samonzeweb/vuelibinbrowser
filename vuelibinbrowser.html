@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue.js library usage</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="./myvuelib/dist/myvuelib.umd.js"></script>
+    <link rel="stylesheet" href="./myvuelib/dist/myvuelib.css" />
+</head>
+
+<body>
+    <div id="first-app">
+        <p>This is the first app, started on {{ now }}</p>
+        <hello-world message="Have a nice day."></hello-world>
+        <hello-vue :displaylogo="true"></hello-vue>
+    </div>
+    <hr />
+
+    <div id="second-app">
+        <p>This is the second app</p>
+        <hello-world message="Have a nice week."></hello-world>
+        <hello-vue :displaylogo="false"></hello-vue>
+    </div>
+    <hr />
+
+    <div id="third-app" />
+    <hr />
+
+    <script>
+        // Create a vue app, and specify each component explicitly
+        var app = new Vue({
+            el: '#first-app',
+            data: {
+                now: (new Date()).toString()
+            },
+            components: {
+                'hello-world': myvuelib.HelloWorld,
+                'hello-vue': myvuelib.HelloVue,
+            }
+        })
+
+        // Register globally components, and create another vue app
+        Vue.component('hello-world', myvuelib.HelloWorld)
+        Vue.component('hello-vue', myvuelib.HelloVue)
+        var app = new Vue({
+            el: '#second-app'
+        })
+
+        // Create a new vue mounting a component directly
+        // (without any template in this file)
+        // WARNING : we can't pass props into the component in this case !
+        new Vue({
+            render: h => h(myvuelib.HelloWorld),
+        }).$mount('#third-app')
+    </script>
+</body>
+
+</html>
